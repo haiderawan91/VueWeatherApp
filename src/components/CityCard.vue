@@ -1,5 +1,8 @@
 <template>
-  <div class="flex py-6 px-4 bg-weather-primary rounded-md shadow-xl cursor-pointer">
+  <div
+    class="flex py-6 px-4 rounded-md shadow-xl cursor-pointer"
+    style="background-color: #50c878"
+  >
     <div class="px-4 py-4" @click.stop="removeCity()">
       <i class="fa fa-remove hover:text-weather-secondary" style="font-size: 30px"></i>
     </div>
