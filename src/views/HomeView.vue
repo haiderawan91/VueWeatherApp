@@ -9,6 +9,7 @@
         class="py-2 px-1 w-full bg-transparent border-b focus:border-weather-secondary focus:outline-none focus:shadow-[0px_1px_0_0_#004E71]"
       />
       <ul
+        v-if="searchResults.length || serverError || searchError"
         class="absolute bg-weather-secondary text-white w-full shadow-md py-2 px-1 top-[66px]"
       >
         <p v-show="serverError">An error occured, try again.</p>
