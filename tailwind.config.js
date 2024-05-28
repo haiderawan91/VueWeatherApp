@@ -8,6 +8,10 @@ module.exports = {
       },
 
     },
+    ringColor: {
+      "weather-ring1":"#008080",
+      "weather-ring2":"#e3bc9a",
+    },
     fontFamily:{
       Roboto: ["Roboto, sans-serif"],
     },
