@@ -54,6 +54,8 @@ import BaseModal from "./BaseModal.vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
 import { ref } from "vue";
 import { uid } from "uid";
+import { useAuthStore } from "@/store/store";
+import { storeToRefs } from "pinia";
 
 const savedCities = ref([]);
 const modalActive = ref(false);
@@ -62,7 +64,9 @@ const toggleModal = () => {
 };
 let router = useRouter();
 let route = useRoute();
-
+const authStore = useAuthStore();
+const { state } = storeToRefs(authStore);
+console.log(state);
 const addCity = () => {
   if (localStorage.getItem("savedCities")) {
     console.log("localstorage exists");

@@ -7,7 +7,7 @@
       class="relative bg-white rounded-lg shadow-lg overflow-hidden max-w-sm w-full z-10"
     >
       <div class="px-6 py-8">
-        <h2 class="text-center text-2xl font-bold text-grey-800 mb-6">Sign up</h2>
+        <h2 class="text-center text-2xl font-bold text-grey-800 mb-6">Sign In</h2>
         <form @submit.prevent="onSubmit">
           <div class="mb-4">
             <label for="email" class="block text-grey-800">Email</label>
@@ -29,29 +29,15 @@
             />
             <span v-if="errors.password" class="text-red-600">{{ errors.password }}</span>
           </div>
-          <div class="mb-4">
-            <label for="confirm-password" class="block text-grey-800"
-              >Confirm Password</label
-            >
-            <input
-              type="password"
-              id="confirm-password"
-              v-model="confirmPassword"
-              class="mt-2 px-4 py-2 border rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-weather-ring1"
-            />
-            <span v-if="errors.confirmPassword" class="text-red-600">{{
-              errors.confirmPassword
-            }}</span>
-          </div>
           <button
             type="submit"
             class="bg-weather-primary text-white px-4 py-2 rounded-lg w-full hover:bg-weather-secondary transition"
           >
-            Create account
+            Sign In
           </button>
         </form>
         <p class="mt-4 text-center text-gray-600">
-          Already have an account? <a href="#" class="text-indigo-600">Log in</a>
+          Dont have an account? <a href="#" class="text-indigo-600">Sign Up</a>
         </p>
       </div>
     </div>
@@ -64,19 +50,15 @@ import * as yup from "yup";
 import { useField, useForm } from "vee-validate";
 import axios from "axios";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "../../store/store.js";
 
-let router = useRouter();
+const router = useRouter();
+const authStore = useAuthStore();
+
 // Define the validation schema
 const schema = yup.object({
   email: yup.string().email("Invalid email").required("Email is required"),
-  password: yup
-    .string()
-    .required("Password is required")
-    .matches(/[A-Z]/, "Password must contain at least one uppercase letter"),
-  confirmPassword: yup
-    .string()
-    .required("Confirm Password is required")
-    .oneOf([yup.ref("password")], "Passwords must match"),
+  password: yup.string().required("Password is required"),
 });
 
 // Setup Vee Validate
@@ -85,23 +67,26 @@ const { validate, errors } = useForm({
 });
 const { value: email } = useField("email");
 const { value: password } = useField("password");
-const { value: confirmPassword } = useField("confirmPassword");
 
-const onSubmit = async (values) => {
+const onSubmit = async () => {
   const valid = await validate();
   if (valid.valid) {
     try {
-      const response = await axios.post("http://localhost:3000/api/Register_user", {
+      const response = await axios.post("http://localhost:3000/api/login", {
         email: email.value,
         password: password.value,
       });
-      console.log("Registered:", response.data);
-      router.push("/home");
+
+      // Ensure the correct data is being passed to the store
+      const userData = response.data.user;
+      console.log("User data to update store:", userData);
+
+      authStore.update(userData); // Correctly update the store
+      router.push("/");
     } catch (error) {
-      console.error("Registration error:", error);
+      console.error("login error:", error);
     }
   }
-  // console.log("Registered:", values);
 };
 </script>
 
