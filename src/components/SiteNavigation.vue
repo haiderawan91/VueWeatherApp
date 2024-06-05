@@ -8,6 +8,12 @@
         </div>
       </RouterLink>
       <div class="flex gap-3 flex-1 justify-end">
+        <div class="download-tooltip">
+          <i
+            class="fa-solid fa-download text-xl hover:text-weather-secondary duration-200 cursor-pointer"
+          ></i>
+          <span class="tooltip-text">Download Weather Data PDF</span>
+        </div>
         <i
           @click="toggleModal"
           class="fa-solid fa-circle-info text-xl hover:text-weather-secondary duration-200 cursor-pointer"
@@ -18,6 +24,11 @@
           v-if="route.query.preview"
         ></i>
       </div>
+      <i
+        v-if="isLoggedin"
+        @click="logout"
+        class="fa-solid fa-sign-out text-xl hover:text-weather-secondary duration-200 cursor-pointer ml-auto"
+      ></i>
       <BaseModal :modalActive="modalActive" @close-modal="toggleModal">
         <div class="text-black">
           <h1 class="text-2xl mb-1">About:</h1>
@@ -48,16 +59,49 @@
     </nav>
   </header>
 </template>
+<style>
+.download-tooltip {
+  position: relative;
+  display: inline-block;
+}
 
+.download-tooltip .fa-download {
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.download-tooltip .tooltip-text {
+  visibility: hidden;
+  width: max-content;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 10px;
+  position: absolute;
+  z-index: 1;
+  top: calc(100% + 5px);
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.download-tooltip:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+</style>
 <script setup>
 import BaseModal from "./BaseModal.vue";
 import { RouterLink, useRoute, useRouter } from "vue-router";
-import { ref } from "vue";
+import { ref, onMounted, onBeforeMount } from "vue";
 import { uid } from "uid";
 import { useAuthStore } from "@/store/store";
 import { storeToRefs } from "pinia";
 
 const savedCities = ref([]);
+const isLoggedin = ref(false);
 const modalActive = ref(false);
 const toggleModal = () => {
   modalActive.value = !modalActive.value;
@@ -65,8 +109,12 @@ const toggleModal = () => {
 let router = useRouter();
 let route = useRoute();
 const authStore = useAuthStore();
-const { state } = storeToRefs(authStore);
-console.log(state);
+const logout = () => {
+  localStorage.removeItem("authStore");
+  isLoggedin.value = false;
+  authStore.clear();
+  router.push("/auth/login");
+};
 const addCity = () => {
   if (localStorage.getItem("savedCities")) {
     console.log("localstorage exists");
@@ -93,4 +141,16 @@ const addCity = () => {
   router.replace({ query });
   console.log("localstorage", localStorage.getItem("savedCities"));
 };
+
+onBeforeMount(() => {
+  const authStore = useAuthStore();
+  const { userData } = storeToRefs(authStore);
+  console.log("userData from store:", userData.value["email"]);
+  if (userData.value["email"]) {
+    isLoggedin.value = true;
+  } else {
+    isLoggedin.value = false;
+    router.push("/auth/login");
+  }
+});
 </script>

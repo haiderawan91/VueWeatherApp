@@ -1,19 +1,24 @@
 import { defineStore } from "pinia";
 
 export const useAuthStore = defineStore('auth', {
-    state: () => ({ 
+    state: () => ({
         userData: {}
     }),
     getters: {
-      getState: (state) => state,
+        getState: (state) => state,
     },
     actions: {
-      clear() {
-        this.userData = null;
-      },
-      update(data) {
-        console.log("at store's update func", data);
-        this.userData = data;
-      },
+        clear() {
+            this.userData = {};
+            this.saveState();
+        },
+        update(data) {
+            console.log("at store's update func", data);
+            this.userData = data;
+            this.saveState();
+        },
+        saveState() {
+            localStorage.setItem('authStore', JSON.stringify(this.$state));
+        },
     },
 });

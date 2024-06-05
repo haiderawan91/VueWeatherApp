@@ -45,12 +45,12 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
 import * as yup from "yup";
 import { useField, useForm } from "vee-validate";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../../store/store.js";
+import { jwtDecode } from "jwt-decode";
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -75,13 +75,14 @@ const onSubmit = async () => {
       const response = await axios.post("http://localhost:3000/api/login", {
         email: email.value,
         password: password.value,
+        withCredentials: true,
       });
-
-      // Ensure the correct data is being passed to the store
+      //
+      let jwt = jwtDecode(response.data.jwt);
+      console.log("decoded", jwt.email);
+      //
       const userData = response.data.user;
-      console.log("User data to update store:", userData);
-
-      authStore.update(userData); // Correctly update the store
+      authStore.update(userData);
       router.push("/");
     } catch (error) {
       console.error("login error:", error);
