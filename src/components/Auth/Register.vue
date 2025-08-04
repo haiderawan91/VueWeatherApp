@@ -51,7 +51,7 @@
           </button>
         </form>
         <p class="mt-4 text-center text-gray-600">
-          Already have an account? <a href="#" class="text-indigo-600">Log in</a>
+          Already have an account? <router-link to="/auth/login" class="text-indigo-600">Log in</router-link>
         </p>
       </div>
     </div>
@@ -94,12 +94,17 @@ const onSubmit = async (values) => {
       const response = await axios.post("http://localhost:3000/api/Register_user", {
         email: email.value,
         password: password.value,
+      },
+      {
+        withCredentials: true 
       });
       console.log("Registered:", response.data);
       router.push("/home");
     } catch (error) {
       console.error("Registration error:", error);
     }
+  }else{
+    console.log("invalid");  
   }
   // console.log("Registered:", values);
 };

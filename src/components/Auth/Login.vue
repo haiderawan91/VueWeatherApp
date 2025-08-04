@@ -37,7 +37,7 @@
           </button>
         </form>
         <p class="mt-4 text-center text-gray-600">
-          Dont have an account? <a href="#" class="text-indigo-600">Sign Up</a>
+          <router-link to="/auth/register" class="text-indigo-600">Sign Up</router-link>
         </p>
       </div>
     </div>
