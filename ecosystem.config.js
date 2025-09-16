@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: "weather-backend",
-      script: "./backend/src/index.js", // adjust if entry file is index.js/app.js
+      script: "./src/index.js", // adjust if entry file is index.js/app.js
       cwd: "./backend",
       instances: 1,
       autorestart: true,
