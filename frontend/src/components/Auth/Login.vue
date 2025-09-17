@@ -73,7 +73,7 @@ const onSubmit = async () => {
   let apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
   if (valid.valid) {
     try {
-      const response = await axios.post(`${apiUrl}/api/login`, {
+      const response = await axios.post(`${apiUrl}/login`, {
         email: email.value,
         password: password.value,
         withCredentials: true,

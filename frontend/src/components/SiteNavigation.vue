@@ -8,12 +8,12 @@
         </div>
       </RouterLink>
       <div class="flex gap-3 flex-1 justify-end">
-        <div class="download-tooltip">
+        <!-- <div class="download-tooltip">
           <i
             class="fa-solid fa-download text-xl hover:text-weather-secondary duration-200 cursor-pointer"
           ></i>
           <span class="tooltip-text">Download Weather Data PDF</span>
-        </div>
+        </div> -->
         <i
           @click="toggleModal"
           class="fa-solid fa-circle-info text-xl hover:text-weather-secondary duration-200 cursor-pointer"
@@ -51,8 +51,7 @@
 
           <h2 class="text-2xl">Removing a city</h2>
           <p>
-            If you no longer wish to track a city, simply select the city from the home
-            page. At the bottom of the page, there will be an option to delete the city.
+            If you no longer wish to track a city, you  can remove it from the home page by clicking the cross icon next to the city name.
           </p>
         </div>
       </BaseModal>
