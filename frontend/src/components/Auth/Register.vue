@@ -89,9 +89,10 @@ const { value: confirmPassword } = useField("confirmPassword");
 
 const onSubmit = async (values) => {
   const valid = await validate();
+  let apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
   if (valid.valid) {
     try {
-      const response = await axios.post("http://localhost:3000/api/Register_user", {
+      const response = await axios.post(`${apiUrl}/api/Register_user`, {
         email: email.value,
         password: password.value,
       },

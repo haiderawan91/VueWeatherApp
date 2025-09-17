@@ -70,9 +70,10 @@ const { value: password } = useField("password");
 
 const onSubmit = async () => {
   const valid = await validate();
+  let apiUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
   if (valid.valid) {
     try {
-      const response = await axios.post("http://localhost:3000/api/login", {
+      const response = await axios.post(`${apiUrl}/api/login`, {
         email: email.value,
         password: password.value,
         withCredentials: true,
